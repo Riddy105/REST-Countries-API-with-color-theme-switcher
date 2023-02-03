@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: "class",
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
@@ -16,7 +17,10 @@ module.exports = {
         },
       },
       boxShadow: {
-        custom1: "0px 10px 60px rgba(38, 45, 118, 0.08)",
+        custom1: "10px 10px 60px rgba(38, 45, 118, 0.08)",
+      },
+      backgroundImage: {
+        searchIcon: "url('/src/assets/Icons/search-outline.svg')",
       },
     },
   },

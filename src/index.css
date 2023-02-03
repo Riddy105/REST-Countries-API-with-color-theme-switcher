@@ -11,4 +11,11 @@
   html {
     font-family: "Nunito Sans", sans-serif;
   }
+  body {
+    @apply text-blue-100;
+  }
+
+  .dark body {
+    @apply text-white;
+  }
 }
