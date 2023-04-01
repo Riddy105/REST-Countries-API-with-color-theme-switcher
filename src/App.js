@@ -1,4 +1,4 @@
-import { createContext, useReducer, useState } from "react";
+import { createContext, useState } from "react";
 import Header from "./Header";
 import Main from "./Main/Main";
 export const ThemeContext = createContext();
@@ -6,7 +6,7 @@ export const ThemeContext = createContext();
 function App() {
   const [theme, setTheme] = useState("light");
   const themeToggler = () => {
-    setTheme((prev) => (prev == "light" ? "dark" : "light"));
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
   return (
     <ThemeContext.Provider value={{ themeToggler }}>

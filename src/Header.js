@@ -8,7 +8,7 @@ const Header = (props) => {
       <div className="container-custom flex justify-between items-center">
         <h2 className="text-lg font-extrabold">Where in the world?</h2>
         <div
-          className="flex gap-1 items-center font-semibold"
+          className="flex gap-1 items-center font-semibold cursor-pointer"
           onClick={ctx.themeToggler}
         >
           <ion-icon name="moon-outline"></ion-icon>

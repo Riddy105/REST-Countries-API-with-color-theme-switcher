@@ -1,6 +1,6 @@
 # Frontend Mentor - REST Countries API with color theme switcher solution
 
-This is a solution to the [REST Countries API with color theme switcher challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/rest-countries-api-with-color-theme-switcher-5cacc469fec04111f7b848ca). Frontend Mentor challenges help you improve your coding skills by building realistic projects. 
+This is a solution to the [REST Countries API with color theme switcher challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/rest-countries-api-with-color-theme-switcher-5cacc469fec04111f7b848ca). Frontend Mentor challenges help you improve your coding skills by building realistic projects.
 
 ## Table of contents
 
@@ -29,7 +29,7 @@ Users should be able to:
 - Filter countries by region
 - Click on a country to see more detailed information on a separate page
 - Click through to the border countries on the detail page
-- Toggle the color scheme between light and dark mode *(optional)*
+- Toggle the color scheme between light and dark mode _(optional)_
 
 ### Screenshot
 
@@ -37,7 +37,7 @@ Users should be able to:
 
 Add a screenshot of your solution. The easiest way to do this is to use Firefox to view your project, right-click the page and select "Take a Screenshot". You can choose either a full-height screenshot or a cropped one based on how long the page is. If it's very long, it might be best to crop it.
 
-Alternatively, you can use a tool like [FireShot](https://getfireshot.com/) to take the screenshot. FireShot has a free option, so you don't need to purchase it. 
+Alternatively, you can use a tool like [FireShot](https://getfireshot.com/) to take the screenshot. FireShot has a free option, so you don't need to purchase it.
 
 Then crop/optimize/edit your image however you like, add it to your project, and update the file path in the image above.
 
@@ -72,20 +72,45 @@ To see how you can add code snippets, see below:
 ```html
 <h1>Some HTML code I'm proud of</h1>
 ```
+
 ```css
 .proud-of-this-css {
   color: papayawhip;
 }
 ```
+
 ```js
 const proudOfThisFunc = () => {
-  console.log('🎉')
-}
+  console.log("🎉");
+};
 ```
 
 If you want more help with writing markdown, we'd recommend checking out [The Markdown Guide](https://www.markdownguide.org/) to learn more.
 
 **Note: Delete this note and the content within this section and replace with your own learnings.**
+I learnt how to leverage the power of useReducer to update a state. I had to keep updating the array of countries depending on different circumstances such as when the page first renders, when the user tries searching via an input, or when the user tries to filter via the continent. It was clear that I need just one state to render the countries but I need to be able to mutate the state based on different circumstances. At first, I hooked into useState storing my inital value as an object with two properties(pure and dynamic) {pure: [], dynamic: []}. At all times, I needed access to the unadultrated version of the result from the fetch function (countryData.pure) i.e The array containing all the countries as this is the pure data which I can always filter to find any country based on the user search. The dynamic property however (countryData.dynamic) is the one that keeps getting updated based on the different circumstances. For example on user search, I'll call a state updatelike this
+
+```js
+ setCountryData(prev => return {
+  {
+    pure: prev.pure // Always the complete list of countries from the API call
+    dynamic: prev.pure.filter(country => country.name.common.includes(input)) // The name of each country resides in 'common.name', input came from an input field
+
+  }
+ })
+
+```
+
+On searching via the dropdown, I'll normally do this
+
+```js
+  setCountryData(prev => return {
+    {
+        ...prev,
+       dynamic: prev.pure.filter(country => country.continents.includes(input))
+    }
+  })
+```
 
 ### Continued development
 

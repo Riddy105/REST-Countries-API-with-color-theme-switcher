@@ -1,8 +1,15 @@
 import React from "react";
 
 const Country = (props) => {
+  const clickHandler = () => {
+    props.redirect(props.name);
+  };
+
   return (
-    <li className="bg-white dark:bg-blue-300 shadow-custom1 rounded-md overflow-hidden">
+    <li
+      className="bg-white dark:bg-blue-300 shadow-custom1 rounded-md overflow-hidden"
+      onClick={clickHandler}
+    >
       <img
         src={props.flag}
         alt="Country flag"

@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import arrow from "../assets/Icons/chevron-down-outline.svg";
 
 const Input = (props) => {
@@ -18,15 +18,17 @@ const Input = (props) => {
   // };
   const changeHandler = (e) => {
     const input = e.target.value;
-    console.log(input);
-    const inputCapitalized =
-      input.trim().length >= 1 ? input[0].toUpperCase() + input.slice(1) : "";
-    props.onChange(inputCapitalized);
+    // const inputCapitalized =
+    //   input.trim().length > 0
+    //     ? input[0].toUpperCase() + input.slice(1).toLowerCase()
+    //     : "";
+    props.onChange(input);
   };
   const filterByContinentHandler = (e) => {
     setdropDown((prev) => !prev);
     props.onDropDown(e.target.textContent);
   };
+
   return (
     <section className="container-custom flex flex-col md:flex-row justify-between gap-3 mb-8">
       <input

@@ -14,6 +14,7 @@ const Countries = (props) => {
             continent={data.continents[0]}
             capital={data.capital?.[0]}
             population={data.population}
+            redirect={props.redirect}
           />
         ))}
       </ul>

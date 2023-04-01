@@ -1,45 +1,58 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import Input from "./Input";
-import { useState } from "react";
 import Countries from "./Countries";
+import CountryDetails from "./SeondPage/CountryDetails";
 
 const countryReducerFn = (state, action) => {
   if (action.type === "INITIAL_RENDER") {
-    return { pure: action.data, dynamic: action.data.slice(0, 8) };
-  }
-  if (action.type === "FILTER_BY_SEARCH") {
     return {
-      ...state,
-      dynamic: action.filteredCountries,
+      pure: action.data,
+      dynamic: action.data.slice(0, 8),
+      clickedCountry: {},
     };
   }
+  if (action.type === "FILTER_BY_SEARCH") {
+    if (action.inputCapitalized === "") {
+      return {
+        ...state,
+        dynamic: state.pure.slice(0, 8),
+      };
+    }
+    if (action.inputCapitalized !== "") {
+      return {
+        ...state,
+        dynamic: state.pure.filter((country) =>
+          country.name.common.includes(action.inputCapitalized)
+        ),
+      };
+    }
+  }
   if (action.type === "FILTER_BY_CONTINENT") {
+    const filteredCountries = state.pure.filter((country) =>
+      country.continents[0].includes(action.continent)
+    );
     return {
       ...state,
-      dynamic: action.filteredCountries,
+      dynamic: filteredCountries,
+    };
+  }
+  if (action.type === "ROUTE") {
+    return {
+      ...state,
+      clickedCountry: state.pure.find(
+        (country) => country.name.common === action.name
+      ),
     };
   }
 };
+
 const Main = () => {
-  // const [countryData, setCountryData] = useState({
-  //   pure: [],
-  //   dynamic: [],
-  // });
+  const [showSecondPage, setShowSecondPage] = useState(false);
   const [countryData, countryDispatchFn] = useReducer(countryReducerFn, {
     pure: [],
     dynamic: [],
+    clickedCountry: {},
   });
-  // useEffect(() => {
-  //   const result = fetch("https://restcountries.com/v3.1/all");
-  //   result
-  //     .then((response) => response.json())
-  //     .then((data) =>
-  //       setCountryData({
-  //         pure: data,
-  //         dynamic: data.slice(0, 8),
-  //       })
-  //     );
-  // }, []);
   useEffect(() => {
     fetch("https://restcountries.com/v3.1/all")
       .then((res) => res.json())
@@ -47,47 +60,40 @@ const Main = () => {
         countryDispatchFn({ type: "INITIAL_RENDER", data: data })
       );
   }, []);
-  // const filterBySearch = (input) => {
-  //   const filteredCountries = countryData.pure.filter((country) =>
-  //     country.name.common.includes(input)
-  //   );
-  //   input.length >= 1
-  //     ? setCountryData((prev) => {
-  //         return {
-  //           ...prev,
-  //           dynamic: filteredCountries,
-  //         };
-  //       })
-  //     : setCountryData((prev) => {
-  //         return {
-  //           ...prev,
-  //           dynamic: prev.pure.slice(0, 8),
-
-  //         };
-  //       });
-  // };
+  const togglePage = () => {
+    setShowSecondPage((prev) => !prev);
+  };
+  const redirect = (name) => {
+    setShowSecondPage((prev) => !prev);
+    countryDispatchFn({ type: "ROUTE", name });
+  };
   const filterBySearch = (input) => {
-    const filteredCountries =
-      input.length >= 1
-        ? countryData.pure.filter((country) =>
-            country.name.common.includes(input)
-          )
-        : countryData.pure.slice(0, 8);
+    const inputCapitalized =
+      input.trim().length > 0
+        ? input[0].toUpperCase() + input.slice(1).toLowerCase()
+        : "";
     countryDispatchFn({
       type: "FILTER_BY_SEARCH",
-      filteredCountries: filteredCountries,
+      inputCapitalized,
     });
   };
   const filterByDropDown = (continent) => {
-    const filteredCountries = countryData.pure.filter((country) =>
-      country.continents[0].includes(continent)
-    );
-    countryDispatchFn({ type: "FILTER_BY_CONTINENT", filteredCountries });
+    countryDispatchFn({ type: "FILTER_BY_CONTINENT", continent });
   };
+
+  const firstPage = (
+    <>
+      <Input onChange={filterBySearch} onDropDown={filterByDropDown} />
+      <Countries data={countryData.dynamic} redirect={redirect} />
+    </>
+  );
+
   return (
     <main className="py-7 bg-grey-200 dark:bg-blue-200 dark:text-white min-h-screen">
-      <Input onChange={filterBySearch} onDropDown={filterByDropDown} />
-      <Countries data={countryData.dynamic} />
+      {!showSecondPage && firstPage}
+      {showSecondPage && (
+        <CountryDetails togglePage={togglePage} data={countryData} />
+      )}
     </main>
   );
 };
@@ -95,7 +101,7 @@ const Main = () => {
 export default Main;
 
 // Initialized a state which holds an object, object contains two main properties. One is the pure version of the array we are getting from our fetch
-// and the other is an adultrated version (Filtered) based on input or any filtering mechanisms, dropdown also.
+// and the other is an adultrated/mutable version (Filtered) based on input or any filtering mechanisms, dropdown also.
 
 // Any argument passed into the dispatchFn is now being used as the second parameter in the reducerFn i.e passed into the 'action' parameter where you can
-// then access it.
+// then access it and update your state accordingly.

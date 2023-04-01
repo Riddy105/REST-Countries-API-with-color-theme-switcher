@@ -18,6 +18,7 @@ module.exports = {
       },
       boxShadow: {
         custom1: "10px 10px 60px rgba(38, 45, 118, 0.08)",
+        custom2: "2px 2px 10px rgba(0, 0, 0, 0.3)",
       },
       backgroundImage: {
         searchIcon: "url('/src/assets/Icons/search-outline.svg')",
